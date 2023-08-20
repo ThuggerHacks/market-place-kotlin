@@ -108,6 +108,7 @@
                     android:background="@drawable/border_top"
                     android:layout_marginTop="10dp"
                     android:textColorHint="@color/black"
+                    android:textColor="@color/black"
                     android:hint="Avalie este vendedor..."/>
                 <RelativeLayout
                     android:layout_width="match_parent"
