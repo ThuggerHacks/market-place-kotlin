@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".View.Fragments.AddFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/product_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/border_top"
+                android:hint="Titulo"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="19sp" />
+
+            <EditText
+                android:id="@+id/product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/border_top"
+                android:gravity="start"
+                android:textColorHint="@color/black"
+                android:hint="Preço"
+                android:inputType="numberDecimal"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="19sp" />
+
+            <EditText
+                android:id="@+id/product_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/border_top"
+                android:gravity="start"
+                android:hint="Localização"
+                android:inputType="text"
+                android:textColorHint="@color/black"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="19sp" />
+
+            <Spinner
+                android:id="@+id/spinner_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/border_top"
+                android:gravity="start"
+                android:backgroundTint="@color/inactive_icon_color"
+                android:padding="5dp"
+                android:foregroundTint="@color/black"
+                android:textSize="19sp" />
+
+            <EditText
+                android:id="@+id/product_desc"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/border_top"
+                android:gravity="start"
+                android:hint="Descrição"
+                android:textColorHint="@color/black"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="19sp" />
+
+            <LinearLayout
+                android:id="@+id/product_file_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/inactive_icon_color"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/product_file_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adicionar Ficheiro "
+                    android:textColor="@color/white"
+                    android:textSize="19sp"
+                    android:padding="5dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/image_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_baseline_attachment_24" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Publicar Produto"
+                android:textSize="17sp" />
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>
