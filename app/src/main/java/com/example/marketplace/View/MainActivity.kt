@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -25,12 +26,15 @@ import com.example.marketplace.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
     private lateinit var result:ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //custom toolbar configs
@@ -46,14 +50,26 @@ class MainActivity : AppCompatActivity() {
         if(intent.getStringExtra("param")?.toInt() == 1){
             val fragment = AddFragment()
             val bundle = Bundle()
-            bundle.putString("id",intent.getStringExtra("param"))
+            bundle.putString("id",intent.getStringExtra("data"))
             fragment.arguments = bundle
             showFragment(fragment)
         }
 
+        //logout
+        val logoutBtn = findViewById<ImageView>(R.id.logout_pic_toolbar)
+        logoutBtn.setOnClickListener{
+            logout()
+        }
+
     }
 
-
+    fun logout(){
+        val storage = this.getSharedPreferences("user", MODE_PRIVATE)
+        val editor = storage.edit()
+        editor.remove("id")
+        editor.apply()
+        startActivity(Intent(this,LoginActivity::class.java))
+    }
     fun showChangeFragments(navigation: BottomNavigationView){
         //change fragments
         navigation.setOnItemSelectedListener {

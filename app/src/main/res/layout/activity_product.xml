@@ -18,6 +18,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_above="@+id/form_message_container"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_container_product">
 
@@ -184,35 +185,34 @@
                         android:textStyle="normal" />
                 </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/form_message_container"
-                android:orientation="horizontal"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/content_container"
-                >
-                <EditText
-                    android:id="@+id/message_input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Enviar Mensagem"
-                    android:layout_weight="1"
-                    android:padding="15dp"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:background="@drawable/border_top"/>
-                <Button
-                    android:id="@+id/btn_send"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/blue"
-                    android:padding="11dp"
-                    android:text="Enviar"/>
-            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+    <LinearLayout
+        android:id="@+id/form_message_container"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        >
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enviar Mensagem"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/border_top"/>
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:padding="11dp"
+            android:text="Enviar"/>
+    </LinearLayout>
 </RelativeLayout>

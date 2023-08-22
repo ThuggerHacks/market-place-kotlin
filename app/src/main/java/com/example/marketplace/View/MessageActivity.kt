@@ -3,6 +3,7 @@ package com.example.marketplace.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,12 @@ class MessageActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         loadMessages(binding.messageRecyclerView)
+
+        //logout
+        val logoutBtn = findViewById<ImageView>(R.id.logout_pic_toolbar)
+        logoutBtn.setOnClickListener{
+            logout()
+        }
     }
 
     private fun loadMessages(recyclerView:RecyclerView){
@@ -49,6 +56,15 @@ class MessageActivity : AppCompatActivity() {
         adapter = MessageListAdapter(list)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+    }
+
+    fun logout(){
+        val storage = this.getSharedPreferences("user", MODE_PRIVATE)
+        val editor = storage.edit()
+        editor.remove("id")
+        editor.apply()
+        startActivity(Intent(this,LoginActivity::class.java))
     }
 
 }

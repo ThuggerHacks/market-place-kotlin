@@ -8,6 +8,7 @@ import com.example.marketplace.Adapter.Listeners.OnProductClickListener
 import com.example.marketplace.Adapter.ViewHolders.ProductViewHolder
 import com.example.marketplace.Model.Product
 import com.example.marketplace.R
+import com.squareup.picasso.Picasso
 
 class ProductListAdapter(var productList: List<Product>, val onClickListener: OnProductClickListener): RecyclerView.Adapter<ProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -19,7 +20,7 @@ class ProductListAdapter(var productList: List<Product>, val onClickListener: On
         val product = productList[position]
         holder.price.text = product.price.toString()
         holder.title.text = product.title
-        holder.image.setImageResource(product.coverUrl.toInt())
+        Picasso.get().load(product.coverUrl).into(holder.image)
         holder.productContainer.setOnClickListener{
             onClickListener.onClick(product)
         }

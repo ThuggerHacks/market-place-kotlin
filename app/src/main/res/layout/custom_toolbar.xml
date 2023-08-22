@@ -23,12 +23,11 @@
             />
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_person_24"
-            android:id="@+id/profile_pic_toolbar"
-            android:background="@drawable/product_border_radius_profile"
+            android:src="@drawable/ic_baseline_logout_24"
+            android:id="@+id/logout_pic_toolbar"
             />
     </LinearLayout>
 </androidx.appcompat.widget.Toolbar>

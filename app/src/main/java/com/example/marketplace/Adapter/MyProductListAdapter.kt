@@ -30,6 +30,11 @@ class MyProductListAdapter(var myProductList:List<Product>, val onMyProductClick
         }
     }
 
+    fun updateProductList(productList: List<Product>){
+        this.myProductList = productList
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return myProductList.size
     }

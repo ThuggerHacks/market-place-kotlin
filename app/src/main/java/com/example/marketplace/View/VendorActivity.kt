@@ -1,8 +1,10 @@
 package com.example.marketplace.View
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -37,6 +39,12 @@ class VendorActivity : AppCompatActivity(), OnRatingClickListener {
         //load ratings
         loadRatings(binding.ratingContainerRecyclerView)
 
+        //logout
+        val logoutBtn = findViewById<ImageView>(R.id.logout_pic_toolbar)
+        logoutBtn.setOnClickListener{
+            logout()
+        }
+
     }
 
     override fun onClick(rating: Rating) {
@@ -51,5 +59,13 @@ class VendorActivity : AppCompatActivity(), OnRatingClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = RatingListAdapter(list,this)
         recyclerView.adapter = adapter
+    }
+
+    fun logout(){
+        val storage = this.getSharedPreferences("user", MODE_PRIVATE)
+        val editor = storage.edit()
+        editor.remove("id")
+        editor.apply()
+        startActivity(Intent(this,LoginActivity::class.java))
     }
 }

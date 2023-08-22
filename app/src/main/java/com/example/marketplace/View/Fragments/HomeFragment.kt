@@ -17,6 +17,8 @@ import com.example.marketplace.Adapter.ProductListAdapter
 import com.example.marketplace.Model.Category
 import com.example.marketplace.Model.Product
 import com.example.marketplace.R
+import com.example.marketplace.Repository.CategoryRepository
+import com.example.marketplace.Repository.ProductRepository
 import com.example.marketplace.View.MainActivity
 import com.example.marketplace.View.ProductActivity
 import kotlinx.coroutines.Dispatchers.Main
@@ -54,64 +56,52 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val productList = ArrayList<Product>()
-        productList.add(
-            Product(1,2,"TELEFONE X7",
-            "ESTE EH UM BOM CELL",1000.0,R.drawable.pc_4.toString(),
-            "Nampula",true,1,"10/10/2023")
-        )
-        productList.add(Product(1,2,"IPHONE 14",
-            "ESTE EH UM BOM CELL",1000.0,R.drawable.pc_1.toString(),
-            "Nampula",true,1,"10/10/2023"))
-        productList.add(Product(1,2,"LAPTOPR",
-            "ESTE EH UM BOM CELL",1000.0,R.drawable.pc_1.toString(),
-            "Nampula",true,1,"10/10/2023"))
-        productList.add(Product(1,2,"LAPTOPR",
-            "ESTE EH UM BOM CELL",1000.0,R.drawable.pc_1.toString(),
-            "Nampula",true,1,"10/10/2023"))
-        productList.add(Product(1,2,"LAPTOPR",
-            "ESTE EH UM BOM CELL",2000.0,R.drawable.pc_4.toString(),
-            "Nampula",true,1,"10/10/2023"))
-        productList.add(Product(1,2,"LAPTOPR",
-            "ESTE EH UM BOM CELL",600.0,R.drawable.pc_4.toString(),
-            "Nampula",true,1,"10/10/2023"))
+        getAllProducts{
+            val adapter = ProductListAdapter(it, OnProductClickListener {
+                try {
+                    val i = Intent(requireContext(), ProductActivity::class.java)
+                    i.putExtra("productId", it.id.toString())
+                    requireContext().startActivity(i)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            })
 
-        val adapter = ProductListAdapter(productList, OnProductClickListener {
-            try {
-                val i = Intent(requireContext(), ProductActivity::class.java)
-                i.putExtra("productId", it.id.toString())
-                requireContext().startActivity(i)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        })
+            recyclerView.layoutManager = GridLayoutManager(view.context,2)
+            recyclerView.adapter = adapter
+        }
 
-        recyclerView.layoutManager = GridLayoutManager(view.context,2)
-        recyclerView.adapter = adapter
         //categoryList
         val category = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.category_list)
         loadCategoryList(category, view)
         return view
     }
 
+    private fun getAllProducts(callback: (List<Product>) -> Unit){
+        val service = ProductRepository()
+        service.getAll {
+            callback(it)
+        }
+    }
+
     private fun loadCategoryList(category:androidx.recyclerview.widget.RecyclerView, view:View){
-        categoryList = ArrayList()
-        categoryList.add(Category(1,"Telefones"))
-        categoryList.add(Category(1,"Acessorios"))
-        categoryList.add(Category(1,"Comida"))
-        categoryList.add(Category(1,"Bebida"))
-        categoryList.add(Category(1,"Computadores"))
-        categoryList.add(Category(1,"Eletrodomesticos"))
-        categoryList.add(Category(1,"Mobiliario"))
-        categoryList.add(Category(1,"Tudo"))
+        getCategoryList {
 
-        categoryAdapter = CategoryListAdapter(categoryList, OnCategoryClickListener {
-            Toast.makeText(view.context,it.title,Toast.LENGTH_SHORT).show()
-        })
+            categoryAdapter = CategoryListAdapter(it, OnCategoryClickListener {
+                Toast.makeText(view.context,it.category_name,Toast.LENGTH_SHORT).show()
+            })
 
-        category.layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL,false)
-        category.adapter = categoryAdapter
+            category.layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL,false)
+            category.adapter = categoryAdapter
+        }
 
+    }
+
+    private fun getCategoryList(callback: (List<Category>) -> Unit){
+        val service = CategoryRepository()
+        service.getCategoryAll{
+            callback(it)
+        }
     }
 
     companion object {

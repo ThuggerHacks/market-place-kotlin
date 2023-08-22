@@ -1,19 +1,23 @@
 package com.example.marketplace.View.Fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.forEach
+import com.example.marketplace.Model.Category
+import com.example.marketplace.Model.Product
 import com.example.marketplace.R
+import com.example.marketplace.Repository.CategoryRepository
+import com.example.marketplace.Repository.ProductRepository
+import com.example.marketplace.View.Fragments.AccountFragment.Companion.IMAGE_PICK_REQUEST_CODE
+import uploadFileToFirebaseStorage
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +34,8 @@ class AddFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var viewCopy:View
+    private lateinit var selectedCategory:String
+    private lateinit var coverUrl:Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,31 +52,30 @@ class AddFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add, container, false)
         val spinner = view.findViewById<Spinner>(R.id.spinner_category)
-        val list = arrayOf("Telefones","Mobilia","Viaturas","Comida","Bebida")
-        val adapter = ArrayAdapter(view.context,android.R.layout.simple_spinner_dropdown_item,list)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        getCategoryList(){
+            val adapter = ArrayAdapter(view.context,android.R.layout.simple_spinner_dropdown_item,it)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
 
-        // Set a listener to handle item selection changes
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = list[position]
-                if (selectedItem != "Select Category") {
-                    // Do something with the selected item
-                    // For example, you can update a TextView with the selected item
-                    // textView.text = selectedItem
-                    Toast.makeText(view?.context,selectedItem,Toast.LENGTH_SHORT).show()
+            // Set a listener to handle item selection changes
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedItem = it[position].toString()
+                    if (selectedItem != "Select Category") {
+                        selectedCategory = selectedItem
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
         }
 
         val fileBtn = view.findViewById<LinearLayout>(R.id.product_file_container)
@@ -82,13 +87,208 @@ class AddFragment : Fragment() {
             viewCopy = view
         }
 
+        //get data from user's product so that it gets updated
         val data = arguments?.getString("id")
         if(data != null){
-            Toast.makeText(view.context,data,Toast.LENGTH_SHORT).show()
+            val title = view.findViewById<EditText>(R.id.product_title)
+            val price = view.findViewById<EditText>(R.id.product_price)
+            val location = view.findViewById<EditText>(R.id.product_location)
+            val description = view.findViewById<EditText>(R.id.product_desc)
+            val btnFile = view.findViewById<Button>(R.id.btn_file)
+            val spinner = view.findViewById<Spinner>(R.id.spinner_category)
+
+            getProductOne(data.toInt()){
+                title.setText(it.title)
+                price.setText(it.price.toString())
+                location.setText(it.location)
+                description.setText(it.description)
+                btnFile.setText("EDITAR PRODUTO")
+
+                getCategoryList {  cat ->
+                    var i = 0
+                    cat.forEach {  item ->
+                        if(item.id == it.categoryId){
+                            spinner.setSelection(i)
+                            true
+                        }
+                        i++
+                    }
+                }
+
+            }
+
         }
 
+        //publicar file
+        val btnFile = view.findViewById<Button>(R.id.btn_file)
+
+        btnFile.setOnClickListener {
+            val title = view.findViewById<EditText>(R.id.product_title)
+            val price = view.findViewById<EditText>(R.id.product_price)
+            val location = view.findViewById<EditText>(R.id.product_location)
+            val description = view.findViewById<EditText>(R.id.product_desc)
+            val productFileText = view.findViewById<TextView>(R.id.product_file_text)
+            val storage = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE)
+            val userId = storage.getInt("id",0)
+            btnFile.setText("CARREGANDO...")
+
+            if(title.text.toString() == ""
+                || price.text.toString() == ""
+                || location.text.toString() == ""
+                || description.text.toString() == ""
+                    ){
+                btnFile.setText("PUBLICAR PRODUTO")
+                Toast.makeText(view.context,"Por favor preencha todos os dados!",Toast.LENGTH_SHORT).show()
+            }else {
+
+                val categoryRepo = CategoryRepository()
+
+                categoryRepo.getCategoryId(selectedCategory) { category ->
+
+                    if (::coverUrl.isInitialized) {
+
+                        uploadFileToFirebaseStorage(coverUrl) { url ->
+                            val product = Product(
+                                0,
+                                userId, title.text.toString(),
+                                description.text.toString(),
+                                price.text.toString().toDouble(),
+                                url.toString(),
+                                location.text.toString(),
+                                0,
+                                category.id
+                            )
+
+                            if(data != null){
+                                updateProduct(data.toInt(),product){
+                                    if(it?.id != 0){
+                                        btnFile.setText("EDITAR PRODUTO")
+                                        Toast.makeText(view.context,"Produto atualizado com sucesso!",Toast.LENGTH_SHORT).show()
+                                       requireActivity().finish()
+                                    }else{
+                                        btnFile.setText("EDITAR PRODUTO")
+                                        Toast.makeText(view.context,"Erro ao atualizar produto",Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }else{
+                                addNewProduct(product){
+                                    if(it?.id == 0){
+                                        Toast.makeText(view.context,"Houve um erro, Volte a tentar mais tarde",Toast.LENGTH_SHORT).show()
+                                    }else{
+                                        btnFile.setText("PUBLICAR PRODUTO")
+                                        title.setText("")
+                                        location.setText("")
+                                        price.setText("")
+                                        description.setText("")
+                                        productFileText.setText("")
+                                        Toast.makeText(view.context,"Produto inserido com sucesso!",Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+
+                        }
+
+                    } else {
+
+                        val product = Product(
+                            0,
+                            userId, title.text.toString(),
+                            description.text.toString(),
+                            price.text.toString().toDouble(),
+                            "",
+                            location.text.toString(),
+                            0,
+                            category.id
+                        )
+                        if(data != null){
+                            updateProduct(data.toInt(),product){
+                                if(it?.id != 0){
+                                    btnFile.setText("EDITAR PRODUTO")
+                                    Toast.makeText(view.context,"Produto atualizado com sucesso!",Toast.LENGTH_SHORT).show()
+                                    requireActivity().finish()
+                                }else{
+                                    btnFile.setText("EDITAR PRODUTO")
+                                    Toast.makeText(view.context,"Erro ao atualizar produto",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }else{
+                            addNewProduct(product){
+                                if(it?.id == 0){
+                                    Toast.makeText(view.context,"Houve um erro, Volte a tentar mais tarde",Toast.LENGTH_SHORT).show()
+                                }else{
+                                    btnFile.setText("PUBLICAR PRODUTO")
+                                    title.setText("")
+                                    location.setText("")
+                                    price.setText("")
+                                    description.setText("")
+                                    productFileText.setText("")
+                                    Toast.makeText(view.context,"Produto inserido com sucesso!",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+        }
 
         return view
+    }
+
+
+
+    private fun getCategoryList(callback: (List<Category>) -> Unit){
+        val service = CategoryRepository()
+        service.getCategoryAll{
+            callback(it)
+        }
+    }
+
+    private fun updateProduct(id:Int, product:Product, callback: (Product) -> Unit){
+       try{
+           val productRepository = ProductRepository()
+           productRepository.updateProduct(id,product){
+                if(it?.error != null){
+                    callback(Product())
+                }else{
+                    callback(it)
+                }
+           }
+       }catch(e:Exception){
+           callback(Product())
+       }
+
+    }
+
+    private fun getProductOne(id:Int, callback: (Product) -> Unit){
+       try{
+           val service = ProductRepository()
+           service.getOneProduct(id){
+                if(it?.error != null){
+                    callback(Product())
+                }else{
+                    callback(it)
+                }
+           }
+       }catch(e:Exception){
+           callback(Product())
+       }
+
+    }
+    private fun  addNewProduct(product: Product, callback:(Product) -> Unit){
+        try{
+            val productRepository = ProductRepository()
+            productRepository.createProduct(product){
+                if(it?.error != null){
+                    callback(Product())
+                }else{
+                    callback(it)
+                }
+            }
+        }catch(e:Exception){
+            callback(Product())
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,6 +296,7 @@ class AddFragment : Fragment() {
         if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val selectedImageUri = data?.data
             // Handle the selected image URI here
+            coverUrl = selectedImageUri!!
            val fileText = viewCopy.findViewById<TextView>(R.id.product_file_text)
             fileText.setText(selectedImageUri.toString())
         }
