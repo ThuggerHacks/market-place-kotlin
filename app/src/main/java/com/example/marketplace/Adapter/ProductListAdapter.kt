@@ -1,6 +1,7 @@
 package com.example.marketplace.Adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -18,8 +19,13 @@ class ProductListAdapter(var productList: List<Product>, val onClickListener: On
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.price.text = product.price.toString()
-        holder.title.text = product.title
+        holder.price.text = "${product.price.toString()} MT"
+       if(product.title.toString().length > 12){
+           holder.title.text = product.title?.toString()?.substring(0,12)
+       }else{
+           holder.dots.visibility = View.GONE
+           holder.title.text = product.title
+       }
         Picasso.get().load(product.coverUrl).into(holder.image)
         holder.productContainer.setOnClickListener{
             onClickListener.onClick(product)

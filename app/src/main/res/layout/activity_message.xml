@@ -41,6 +41,7 @@
                       android:orientation="vertical"
                       android:layout_height="wrap_content">
                       <TextView
+                          android:id="@+id/product_title_message"
                           android:layout_width="wrap_content"
                           android:text="LAPTOP A45"
                           android:textStyle="bold"
@@ -49,6 +50,7 @@
                           android:textSize="25sp"
                           android:layout_height="wrap_content"/>
                       <TextView
+                          android:id="@+id/product_date_message"
                           android:layout_width="wrap_content"
                           android:text="20/02/2023"
                           android:textColor="@color/black"
@@ -58,6 +60,7 @@
                           android:layout_height="wrap_content"/>
                   </LinearLayout>
                   <Button
+                      android:id="@+id/btn_buy"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="Ja Comprei"/>
@@ -67,7 +70,7 @@
                <androidx.recyclerview.widget.RecyclerView
                    android:id="@+id/message_recycler_view"
                    android:padding="10dp"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"/>
            </LinearLayout>
         </ScrollView>
@@ -81,6 +84,7 @@
         android:gravity="center"
         android:id="@+id/form_send_message">
         <EditText
+            android:id="@+id/message_input_to_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border_top"
@@ -92,6 +96,7 @@
             android:textColor="@color/black"
             />
         <Button
+            android:id="@+id/send_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"

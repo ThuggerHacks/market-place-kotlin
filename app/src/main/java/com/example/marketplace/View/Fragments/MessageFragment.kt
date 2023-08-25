@@ -1,5 +1,6 @@
 package com.example.marketplace.View.Fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.example.marketplace.Adapter.ChatListAdapter
 import com.example.marketplace.Adapter.Listeners.OnChatClickListener
 import com.example.marketplace.Model.Chat
 import com.example.marketplace.R
+import com.example.marketplace.Repository.ChatRepository
 import com.example.marketplace.View.MessageActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,27 +47,29 @@ class MessageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_message, container, false)
-        loadChats(view)
+        val storage = view.context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val userId = storage.getInt("id",0)
+        loadChats(view, userId)
         return view
     }
 
 
-    fun loadChats(view:View){
+    fun loadChats(view:View, id:Int){
+
         val messageViewer = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.message_fragment)
-        chatList = ArrayList()
-        chatList.add(Chat(1,"Hello world!","Computer","Braimo"))
-        chatList.add(Chat(1,"Hello, There!","Computer","Sakif"))
-        chatList.add(Chat(1,"Hi, How are u?","Computer","Xafik"))
-        chatList.add(Chat(1,"Hello world!","Computer","Belcio"))
 
-        chatAdapter = ChatListAdapter(chatList, OnChatClickListener {
-           val intent = Intent(requireContext(),MessageActivity::class.java)
-            intent.putExtra("chatId",it.id)
-            requireContext().startActivity(intent)
-        })
-
+        val chatRepository = ChatRepository()
         messageViewer.layoutManager = LinearLayoutManager(view.context)
-        messageViewer.adapter = chatAdapter
+        chatRepository.getChatsByUserId(id){ list ->
+            chatAdapter = ChatListAdapter(list, OnChatClickListener {
+                val intent = Intent(requireContext(),MessageActivity::class.java)
+                intent.putExtra("chatId",it.id)
+                requireContext().startActivity(intent)
+            })
+
+            messageViewer.adapter = chatAdapter
+        }
+
     }
 
     companion object {
