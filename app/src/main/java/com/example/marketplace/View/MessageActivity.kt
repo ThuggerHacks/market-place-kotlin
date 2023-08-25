@@ -1,10 +1,15 @@
 package com.example.marketplace.View
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -20,7 +25,9 @@ import com.example.marketplace.Repository.ChatRepository
 import com.example.marketplace.Repository.MessageRepository
 import com.example.marketplace.Repository.ProductRepository
 import com.example.marketplace.Repository.UserRepository
+import com.example.marketplace.View.Fragments.AddFragment
 import com.example.marketplace.databinding.ActivityMessageBinding
+import uploadFileToFirebaseStorage
 
 class MessageActivity : AppCompatActivity(), OnMessageClickListener {
     private lateinit var binding: ActivityMessageBinding
@@ -44,7 +51,7 @@ class MessageActivity : AppCompatActivity(), OnMessageClickListener {
 
         }
         val toolbarLabel = findViewById<TextView>(R.id.toolbar_label)
-        toolbarLabel.setText("Braimo Selimane")
+        toolbarLabel.setText("Carregando...")
         toolbarLabel.setOnClickListener {
             val intent = Intent(this,VendorActivity::class.java)
             intent.putExtra("receiverId",receiverId)
@@ -122,9 +129,40 @@ class MessageActivity : AppCompatActivity(), OnMessageClickListener {
            }
         }
 
+        //change to pic on type
+        binding.fileInput.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            val chooser = Intent.createChooser(intent,"Escolha um app para abrir")
+            startActivityForResult(chooser,REQUEST_CODE)
+        }
+
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val selectedImage:Uri = data?.data!!
+            val msgRepo = MessageRepository()
+            Toast.makeText(this,"A Imagem esta sendo enviada, por favor aguarde!",Toast.LENGTH_SHORT).show()
+            uploadFileToFirebaseStorage(selectedImage){ url ->
+                val msgData = Message("Imagem",chatId,userId,receiverId,"",url.toString())
+              msgRepo.createMessage(msgData){ msg ->
+                  if(msg?.id != 0 ){
+                      msgRepo.getAllByChat(chatId){ chat ->
+                          adapter.updateList(chat)
+                          Toast.makeText(this,"Imagem enviada com sucesso!",Toast.LENGTH_SHORT).show()
+                      }
+                  }else{
+                      Toast.makeText(this,"Houve um erro ao enviar a mensagem!",Toast.LENGTH_SHORT).show()
+                  }
+              }
+            }
+
+        }
+    }
 
 
     override fun onClick(message: Message) {
@@ -189,6 +227,10 @@ class MessageActivity : AppCompatActivity(), OnMessageClickListener {
         editor.remove("id")
         editor.apply()
         startActivity(Intent(this,LoginActivity::class.java))
+    }
+
+    companion object{
+        val REQUEST_CODE = 1
     }
 
 }

@@ -62,8 +62,16 @@ class MessageListAdapter(var messageList:List<Message>, val context:Context,val 
                 }
             }
         }
-        holder.message.text = message.message
 
+        if(message.photoAttach != "" && message.photoAttach != null){
+            Picasso.get().load(message.photoAttach).into(holder.image)
+            holder.message.visibility = View.GONE
+            holder.image.visibility = View.VISIBLE
+        }else{
+            holder.message.visibility = View.VISIBLE
+            holder.image.visibility = View.GONE
+            holder.message.text = message.message
+        }
     }
 
     fun updateList(messageList: List<Message>){

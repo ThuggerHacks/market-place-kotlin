@@ -38,7 +38,7 @@
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:text="Message Topic"/>
+                            android:text="Carregando..."/>
                         <TextView
                             android:layout_weight="2"
                             android:id="@+id/chat_date"
@@ -48,7 +48,7 @@
                             android:textSize="12sp"
                             android:gravity="right"
                             android:textStyle="italic"
-                            android:text="05/02/2023"/>
+                            android:text="Carregando..."/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -59,13 +59,13 @@
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:text="Braimo: "/>
+                            android:text="Carregando..."/>
                         <TextView
                             android:id="@+id/message_text"
                             android:textColor="@color/black_opac"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Actual Message Right here..."/>
+                            android:text="Carregando..."/>
                     </LinearLayout>
             </LinearLayout>
 

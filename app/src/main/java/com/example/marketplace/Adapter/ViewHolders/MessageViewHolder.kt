@@ -12,4 +12,5 @@ class MessageViewHolder(view:View): RecyclerView.ViewHolder(view) {
     val bolb = view.findViewById<LinearLayout>(R.id.bolb_container)
     val profile = view.findViewById<ImageView>(R.id.user_profil_messge_pic)
     val delBtn = view.findViewById<ImageView>(R.id.delete_btn_message)
+    val image = view.findViewById<ImageView>(R.id.image_chat)
 }

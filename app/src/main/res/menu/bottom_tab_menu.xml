@@ -20,9 +20,9 @@
         android:iconTint="@color/icon_color_selector_bottom_tab"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="@string/perfil" />
-    <item
-        android:id="@+id/search_tab"
-        android:iconTint="@color/icon_color_selector_bottom_tab"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="@string/pesquisar" />
+<!--    <item-->
+<!--        android:id="@+id/search_tab"-->
+<!--        android:iconTint="@color/icon_color_selector_bottom_tab"-->
+<!--        android:icon="@drawable/ic_baseline_search_24"-->
+<!--        android:title="@string/pesquisar" />-->
 </menu>

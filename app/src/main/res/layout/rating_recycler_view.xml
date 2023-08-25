@@ -11,7 +11,7 @@
         android:id="@+id/user_rater"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Braimo Selimane "
+        android:text="Carregando... "
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"/>
@@ -19,7 +19,7 @@
         android:id="@+id/comment_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is a comment"
+        android:text="Carregando..."
         android:textSize="16sp"
         android:textColor="@color/white"
         />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="19sp"
-                android:text="2"/>
+                android:text="..."/>
         </LinearLayout>
         <LinearLayout
             android:visibility="gone"

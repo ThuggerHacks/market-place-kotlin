@@ -43,7 +43,7 @@
                       <TextView
                           android:id="@+id/product_title_message"
                           android:layout_width="wrap_content"
-                          android:text="LAPTOP A45"
+                          android:text="CARREGANDO..."
                           android:textStyle="bold"
                           android:textColor="@color/black"
                           android:layout_weight="1"
@@ -52,7 +52,7 @@
                       <TextView
                           android:id="@+id/product_date_message"
                           android:layout_width="wrap_content"
-                          android:text="20/02/2023"
+                          android:text="Carregando..."
                           android:textColor="@color/black"
                           android:textStyle="bold"
                           android:layout_weight="1"
@@ -63,7 +63,7 @@
                       android:id="@+id/btn_buy"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="Ja Comprei"/>
+                      android:text="..."/>
 
 
               </LinearLayout>
@@ -83,6 +83,13 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:id="@+id/form_send_message">
+        <ImageView
+            android:id="@+id/file_input"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_top"
+            android:src="@drawable/ic_baseline_attach_file_24"
+            />
         <EditText
             android:id="@+id/message_input_to_send"
             android:layout_width="match_parent"

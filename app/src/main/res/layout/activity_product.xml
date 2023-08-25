@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="350dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/pc_1" />
+                        android:src="@drawable/ic_baseline_image_24" />
 
                     <TextView
                         android:id="@+id/product_availability"
@@ -69,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:text="TABLET FORDABLE"
+                        android:text="CARREGANDO..."
                         android:textSize="20sp"
                         android:maxLines="5"
                         android:textColor="@color/black"
@@ -79,7 +79,7 @@
                         android:id="@+id/product_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$2000"
+                        android:text="Carregando..."
                         android:layout_weight="2"
                         android:maxLines="1"
                         android:textAlignment="textEnd"
@@ -114,7 +114,7 @@
                             android:id="@+id/product_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nampula"
+                            android:text="Carregando..."
                             android:textColor="@color/black"
                             android:textSize="17sp"
                             android:textStyle="normal" />
@@ -138,7 +138,7 @@
                             android:id="@+id/product_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10/10/2023"
+                            android:text="Carregando..."
                             android:textColor="@color/black"
                             android:textSize="17sp"
                             android:textStyle="normal" />
@@ -162,7 +162,7 @@
                             android:id="@+id/vendoer_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Braimo Selimane"
+                            android:text="Carregando..."
                             android:textColor="@color/black"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -183,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:justificationMode="inter_word"
-                        android:text="Descricao do produto Descricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produto Descricao do produto Descricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produto Descricao do produto Descricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produto Descricao do produto Descricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produtoDescricao do produto"
+                        android:text="Careegando..."
                         android:textSize="16sp"
                         android:layout_marginBottom="10dp"
                         android:textStyle="normal" />
@@ -198,6 +198,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         >
         <EditText

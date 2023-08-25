@@ -41,7 +41,7 @@ class VendorActivity : AppCompatActivity(), OnRatingClickListener {
         //toolbar configs
         val toolbarLabel = findViewById<TextView>(R.id.toolbar_label)
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.custom_toolbar)
-        toolbarLabel.setText("Braimo Selimane")
+        toolbarLabel.setText("Carregando...")
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //spinner config
@@ -121,6 +121,8 @@ class VendorActivity : AppCompatActivity(), OnRatingClickListener {
             binding.vendorEmail.setText(it.email)
             binding.vendorLocation.setText(it.location)
             binding.vendorPhone.setText(it.phone.toString())
+            val toolbar = findViewById<TextView>(R.id.toolbar_label)
+            toolbar.setText(it.name)
             if(it.profilePic != null && it.profilePic != ""){
                 Picasso.get().load(it.profilePic).into(binding.vendorProfile)
             }

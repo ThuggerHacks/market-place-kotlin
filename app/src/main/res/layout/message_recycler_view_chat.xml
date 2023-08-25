@@ -13,7 +13,7 @@
         android:src="@drawable/ic_baseline_person_24"
         />
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:id="@+id/bolb_container"
         android:layout_width="match_parent"
         android:background="@color/blue"
@@ -24,10 +24,17 @@
         <TextView
             android:id="@+id/message_bolb"
             android:layout_width="match_parent"
-            android:text="Hello !"
+            android:text="Carregando..."
             android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/image_chat"
+            android:layout_gravity="center"
+            android:src="@drawable/profile"
+            android:layout_width="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_height="300dp"/>
 
 
     </LinearLayout>

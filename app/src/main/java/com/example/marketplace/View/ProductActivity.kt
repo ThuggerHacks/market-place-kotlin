@@ -60,6 +60,8 @@ class ProductActivity : AppCompatActivity() {
 
             if(userId == it.userId){
                 binding.formMessageContainer.visibility = View.GONE
+            }else{
+                binding.formMessageContainer.visibility = View.VISIBLE
             }
 
             getVendor(it.userId){

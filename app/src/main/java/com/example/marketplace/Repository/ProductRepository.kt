@@ -122,4 +122,42 @@ class ProductRepository {
             }
         })
     }
+
+    fun getProductByCategoryName(name:String, callback: (List<Product>) -> Unit){
+        val service = RetrofitClient.createService(ProductService::class.java)
+        val product = service.getProductByCategoryName(name)
+        var list = ArrayList<Product>()
+        product.enqueue(object :  Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if(response.isSuccessful){
+                    val body = response.body()!!
+                    callback(body)
+                }else{
+                    callback(list)
+                }
+            }
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                callback(list)
+            }
+        })
+    }
+
+    fun searchProduct(title:String, callback: (List<Product>) -> Unit){
+        val service = RetrofitClient.createService(ProductService::class.java)
+        val product = service.getProductByTitle(title)
+        var list = ArrayList<Product>()
+        product.enqueue(object :  Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if(response.isSuccessful){
+                    val body = response.body()!!
+                    callback(body)
+                }else{
+                    callback(list)
+                }
+            }
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                callback(list)
+            }
+        })
+    }
 }

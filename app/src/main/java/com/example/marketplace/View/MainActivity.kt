@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -18,6 +19,7 @@ import com.example.marketplace.Adapter.CategoryListAdapter
 import com.example.marketplace.Adapter.Listeners.OnCategoryClickListener
 import com.example.marketplace.Model.Category
 import com.example.marketplace.R
+import com.example.marketplace.Repository.ProductRepository
 import com.example.marketplace.View.Fragments.AccountFragment
 import com.example.marketplace.View.Fragments.AddFragment
 import com.example.marketplace.View.Fragments.HomeFragment
@@ -78,18 +80,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.chat_tab -> showFragment(MessageFragment())
                 R.id.add_tab -> showFragment(AddFragment())
                 R.id.person_tab -> showFragment(AccountFragment())
-                R.id.search_tab -> {
-                    //do something for search button
-                    val view = layoutInflater.inflate(R.layout.bottom_sheet,null)
-                    val dialog = BottomSheetDialog(this)
-                    dialog.setContentView(view)
-                    dialog.show()
-                    //hide the dialog on click of the ok button
-                    val btn_okay = view.findViewById<Button>(R.id.ok_btn)
-                    btn_okay.setOnClickListener {
-                        dialog.hide()
-                    }
-                }
                 else -> {
                     showFragment(HomeFragment())
                 }

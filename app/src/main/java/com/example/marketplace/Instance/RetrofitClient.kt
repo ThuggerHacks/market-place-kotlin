@@ -10,7 +10,7 @@ class RetrofitClient {
         private lateinit var INSTANCE: Retrofit
 
         fun getInstance():Retrofit{
-            val baseUrl = " https://8cb0-197-235-68-72.ngrok-free.app/api/"
+            val baseUrl = "https://7de2-197-235-240-75.ngrok-free.app/api/"
             val httpClient = OkHttpClient.Builder()
             if(!::INSTANCE.isInitialized){
                 synchronized(RetrofitClient::class.java){

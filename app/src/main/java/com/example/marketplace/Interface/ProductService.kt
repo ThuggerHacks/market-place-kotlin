@@ -20,6 +20,12 @@ interface ProductService {
     @GET("product")
     fun getAll(): Call<List<Product>>
 
+    @GET("product/category/{name}")
+    fun getProductByCategoryName(@Path("name") name:String):Call<List<Product>>
+
+    @GET("search/{title}")
+    fun getProductByTitle(@Path("title") title:String):Call<List<Product>>
+
     @DELETE("product/{id}")
     fun deleteOne(@Path("id") id:Int): Call<Product>
 

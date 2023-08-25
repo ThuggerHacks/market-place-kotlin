@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +42,8 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
     private lateinit var categoryAdapter:CategoryListAdapter
     private lateinit var categoryList:ArrayList<Category>
+    private lateinit var adapter: ProductListAdapter
+    private lateinit var loader:LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +60,11 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        loader = view.findViewById<LinearLayout>(R.id.loader_layout)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         getAllProducts{
-            val adapter = ProductListAdapter(it, OnProductClickListener {
+            adapter = ProductListAdapter(it, OnProductClickListener {
                 try {
                     val i = Intent(requireContext(), ProductActivity::class.java)
                     i.putExtra("productId", it.id.toString())
@@ -66,6 +73,7 @@ class HomeFragment : Fragment() {
                     e.printStackTrace()
                 }
             })
+            loader.visibility = View.GONE
 
             recyclerView.layoutManager = GridLayoutManager(view.context,2)
             recyclerView.adapter = adapter
@@ -74,6 +82,20 @@ class HomeFragment : Fragment() {
         //categoryList
         val category = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.category_list)
         loadCategoryList(category, view)
+
+        //search
+
+        val btnOk = view.findViewById<Button>(R.id.ok_btn)
+        val searchInput = view.findViewById<EditText>(R.id.search_input)
+
+        btnOk.setOnClickListener {
+            loader.visibility = View.VISIBLE
+            val title = searchInput.text.toString()
+            ProductRepository().searchProduct(title){
+                adapter.updateProductList(it)
+                loader.visibility = View.GONE
+            }
+        }
         return view
     }
 
@@ -88,7 +110,11 @@ class HomeFragment : Fragment() {
         getCategoryList {
 
             categoryAdapter = CategoryListAdapter(it, OnCategoryClickListener {
-                Toast.makeText(view.context,it.category_name,Toast.LENGTH_SHORT).show()
+                loader.visibility = View.VISIBLE
+                ProductRepository().getProductByCategoryName(it.category_name){
+                    adapter.updateProductList(it)
+                    loader.visibility = View.GONE
+                }
             })
 
             category.layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL,false)

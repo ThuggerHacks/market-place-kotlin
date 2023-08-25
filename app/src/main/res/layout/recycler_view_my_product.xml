@@ -10,7 +10,7 @@
         android:id="@+id/my_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Telefone Samsung Galaxy"
+        android:text="Carregando..."
         android:textSize="20sp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/white"/>
