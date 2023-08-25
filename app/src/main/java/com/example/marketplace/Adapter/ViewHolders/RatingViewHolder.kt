@@ -12,4 +12,5 @@ class RatingViewHolder(view:View):RecyclerView.ViewHolder(view) {
     val comment = view.findViewById<TextView>(R.id.comment_rate)
     val starts = view.findViewById<TextView>(R.id.rating_star)
     val btnDel = view.findViewById<LinearLayout>(R.id.delete_btn)
+    val bolb = view.findViewById<LinearLayout>(R.id.rating_bolb)
 }

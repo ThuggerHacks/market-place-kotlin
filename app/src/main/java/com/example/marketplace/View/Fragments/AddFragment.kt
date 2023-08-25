@@ -155,7 +155,7 @@ class AddFragment : Fragment() {
                                 price.text.toString().toDouble(),
                                 url.toString(),
                                 location.text.toString(),
-                                0,
+                                1,
                                 category.id
                             )
 
@@ -197,7 +197,7 @@ class AddFragment : Fragment() {
                             price.text.toString().toDouble(),
                             "",
                             location.text.toString(),
-                            0,
+                            1,
                             category.id
                         )
                         if(data != null){

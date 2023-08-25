@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.marketplace.Adapter.Listeners.OnMessageClickListener
 import com.example.marketplace.Adapter.MessageListAdapter
 import com.example.marketplace.Model.Message
 import com.example.marketplace.Model.Product
@@ -21,15 +22,17 @@ import com.example.marketplace.Repository.ProductRepository
 import com.example.marketplace.Repository.UserRepository
 import com.example.marketplace.databinding.ActivityMessageBinding
 
-class MessageActivity : AppCompatActivity() {
+class MessageActivity : AppCompatActivity(), OnMessageClickListener {
     private lateinit var binding: ActivityMessageBinding
     private lateinit var adapter:MessageListAdapter
     private lateinit var list:ArrayList<Message>
     private var receiverId:Int = 0
     private var userId:Int = 0
+    private var chatId:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val chatId = intent.getIntExtra("chatId",0)
+        val chat= intent.getIntExtra("chatId",0)
+        chatId = chat
         val storage = this.getSharedPreferences("user", MODE_PRIVATE)
         val user = storage.getInt("id",0)
         userId = user
@@ -44,6 +47,7 @@ class MessageActivity : AppCompatActivity() {
         toolbarLabel.setText("Braimo Selimane")
         toolbarLabel.setOnClickListener {
             val intent = Intent(this,VendorActivity::class.java)
+            intent.putExtra("receiverId",receiverId)
             startActivity(intent)
         }
         setSupportActionBar(toolbar)
@@ -89,22 +93,28 @@ class MessageActivity : AppCompatActivity() {
            ChatRepository().getOne(chatId){
                productRepository.getOneProduct(it.productId){p ->
                    if(p.userId != userId){
-                       productRepository.updateProduct(p.id,product){ u ->
-                           if(u?.id != 0){
-                               binding.btnBuy.setText("Vendido")
-                               Toast.makeText(this,"Aguarde pela confirmaco do vendedor!",Toast.LENGTH_SHORT).show()
-                           }else{
-                               Toast.makeText(this,"Houve um erro!",Toast.LENGTH_SHORT).show()
-                           }
-                       }
+                     if(p.available == 1){
+                         productRepository.updateProduct(p.id,product){ u ->
+                             if(u?.id != 0){
+                                 binding.btnBuy.setText("Vendido")
+                                 Toast.makeText(this,"Aguarde pela confirmaco do vendedor!",Toast.LENGTH_SHORT).show()
+                             }else{
+                                 Toast.makeText(this,"Houve um erro!",Toast.LENGTH_SHORT).show()
+                             }
+                         }
+                     }else{
+                         Toast.makeText(this,"Aguarde pela confirmaco do vendedor!",Toast.LENGTH_SHORT).show()
+                     }
                    }else{
-                       val product = Product(0,userId,"","",0.0,"","",3,0,"")
-                       productRepository.updateProduct(p.id,product){ u ->
-                           if(u?.id != 0){
-                               binding.btnBuy.setText("Vendido")
-                               Toast.makeText(this,"Produto vendido com sucesso!",Toast.LENGTH_SHORT).show()
-                           }else{
-                               Toast.makeText(this,"Houve um erro!",Toast.LENGTH_SHORT).show()
+                       if(p.available == 2){
+                           val product = Product(0,userId,"","",0.0,"","",3,0,"")
+                           productRepository.updateProduct(p.id,product){ u ->
+                               if(u?.id != 0){
+                                   binding.btnBuy.setText("Vendido")
+                                   Toast.makeText(this,"Produto vendido com sucesso!",Toast.LENGTH_SHORT).show()
+                               }else{
+                                   Toast.makeText(this,"Houve um erro!",Toast.LENGTH_SHORT).show()
+                               }
                            }
                        }
                    }
@@ -112,13 +122,25 @@ class MessageActivity : AppCompatActivity() {
            }
         }
 
+
+    }
+
+
+
+    override fun onClick(message: Message) {
+        MessageRepository().deleteMessage(message.id){
+            Toast.makeText(this,"Mensagem Apagada com sucesso!",Toast.LENGTH_SHORT).show()
+            MessageRepository().getAllByChat(chatId){ m ->
+                adapter.updateList(m)
+            }
+        }
     }
 
     private fun loadMessages(recyclerView:RecyclerView, chatId:Int){
 
         recyclerView.layoutManager = LinearLayoutManager(this)
        MessageRepository().getAllByChat(chatId){ list ->
-           adapter = MessageListAdapter(list,this, userId)
+           adapter = MessageListAdapter(list,this, userId,this)
            recyclerView.adapter = adapter
        }
 
